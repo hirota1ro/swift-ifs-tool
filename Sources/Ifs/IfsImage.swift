@@ -34,8 +34,14 @@ extension Ifs.Image {
         let n = iterations * density * density
         let workImage = NSImage(size: workSize)
         workImage.lockFocus()
-        NSColor.black.setFill()
-        CGRect(origin:.zero, size: workSize).fill()
+        if !transparent {
+            if dark {
+                NSColor.black.setFill()
+            } else {
+                NSColor.white.setFill()
+            }
+            CGRect(origin:.zero, size: workSize).fill()
+        }
         let pro = MeasurementProgress(IndeterminableProgress())
         let resolver = VelocityColorResolver(v: stat.velocity)
         try algorithm.process(iterations: n, plotter: IfsRenderer(screen: affine, resolver: resolver), progress: pro)

@@ -24,6 +24,10 @@ extension Ifs {
         var iterations: Int = 100_000
         @Option(name: .shortAndLong, help: "number of high density")
         var density: Int = 1
+        @Flag(name: .long, inversion: .prefixedNo, help: "If true, assumes a black background")
+        var dark: Bool = true
+        @Flag(name: .long, help: "If false, fill background opaque color")
+        var transparent: Bool = false
         @Option(name: .shortAndLong, help: "output file path")
         var outputFile: String = "IFS.png"
     }
