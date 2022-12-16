@@ -28,6 +28,8 @@ extension Ifs {
         var dark: Bool = true
         @Flag(name: .long, help: "If false, fill background opaque color")
         var transparent: Bool = false
+        @Option(name: .shortAndLong, help: "Gamma factor: enabled when density>1")
+        var gamma: Float = 0.5
         @Option(name: .shortAndLong, help: "output file path")
         var outputFile: String = "IFS.png"
     }

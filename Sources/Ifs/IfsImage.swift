@@ -53,7 +53,17 @@ extension Ifs.Image {
         } else {
             fileURL = URL(fileURLWithPath: outputFile)
         }
-        let image = density > 1 ? workImage.resized(to: imgSize) : workImage
+        let image: NSImage
+        if density > 1 {
+            let imgSmall = workImage.resized(to: imgSize)
+            if let imgGamma = imgSmall.gammaAdjusted(inputPower: gamma) {
+                image = imgGamma
+            } else {
+                image = imgSmall
+            }
+        } else {
+            image = workImage
+        }
         if let data = image.pngData {
             do {
                 try data.write(to: fileURL, options: .atomic)
