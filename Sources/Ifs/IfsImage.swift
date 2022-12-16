@@ -43,7 +43,8 @@ extension Ifs.Image {
             CGRect(origin:.zero, size: workSize).fill()
         }
         let pro = MeasurementProgress(IndeterminableProgress())
-        let resolver = VelocityColorResolver(v: stat.velocity)
+        let br: IfsBrightnessResolver = dark ? BlackBackBrightnessResolver() : WhiteBackBrightnessResolver()
+        let resolver = VelocityColorResolver(v: stat.velocity, easing: EaseOutQuart, brightness: br)
         try algorithm.process(iterations: n, plotter: IfsRenderer(screen: affine, resolver: resolver), progress: pro)
         workImage.unlockFocus()
         let fileURL:URL
