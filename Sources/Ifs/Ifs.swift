@@ -17,7 +17,7 @@ extension Ifs {
         @Argument
         var inputFile: String
         @Option(name: .shortAndLong, help: "size of image width")
-        var width: Int = 256
+        var width: Int = 512
         @Option(name: .shortAndLong, help: "size of image height (default: equals to width)")
         var height: Int?
         @Option(name: [.customShort("N"), .long], help: "number of iterations")
