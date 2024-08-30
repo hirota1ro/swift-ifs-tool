@@ -32,21 +32,22 @@ extension Ifs.Image {
           .scaledBy(x: imgScale, y: imgScale)
           .translatedBy(x: -stat.center.x, y: -stat.center.y)
         let n = iterations * density * density
-        let workImage = NSImage(size: workSize)
-        workImage.lockFocus()
-        if !transparent {
-            if dark {
-                NSColor.black.setFill()
-            } else {
-                NSColor.white.setFill()
+        let bitmap = Bitmap(size: workSize)
+        let cgImg = try bitmap.image { _ in
+            if !transparent {
+                if dark {
+                    NSColor.black.setFill()
+                } else {
+                    NSColor.white.setFill()
+                }
+                CGRect(origin:.zero, size: workSize).fill()
             }
-            CGRect(origin:.zero, size: workSize).fill()
+            let pro = MeasurementProgress(IndeterminableProgress())
+            let br: IfsBrightnessResolver = dark ? BlackBackBrightnessResolver() : WhiteBackBrightnessResolver()
+            let resolver = VelocityColorResolver(v: stat.velocity, easing: EaseOutQuart, brightness: br)
+            try algorithm.process(iterations: n, plotter: IfsRenderer(screen: affine, resolver: resolver), progress: pro)
         }
-        let pro = MeasurementProgress(IndeterminableProgress())
-        let br: IfsBrightnessResolver = dark ? BlackBackBrightnessResolver() : WhiteBackBrightnessResolver()
-        let resolver = VelocityColorResolver(v: stat.velocity, easing: EaseOutQuart, brightness: br)
-        try algorithm.process(iterations: n, plotter: IfsRenderer(screen: affine, resolver: resolver), progress: pro)
-        workImage.unlockFocus()
+        let workImage = NSImage(cgImage: cgImg, size: workSize)
         let fileURL:URL
         if let seq = sequence {
             fileURL = outputFileURL(sequence: seq)
